@@ -20,6 +20,8 @@ export class HomePage {
   markerCount: number;
 
   constructor(public navCtrl: NavController, private modalCtrl: ModalController) {
+    // TODO: Retrieve objects from Database
+
     this.markerCount = 0;
 
     let options = {timeout: 10000, enableHighAccuracy: true};
@@ -83,11 +85,25 @@ export class HomePage {
     placeOfInterestModal.onDidDismiss(data => {
       console.log(data);
 
-      let incidentString = "Incident: " + data.title + "<br>" + "Time Reported: " + data.time + "<br>" + "Severity: " + data.levelOfInterest + "<br>" + "Comments: " + data.comments + "<br>";
+      let offset: number = new Date().getTimezoneOffset() * 60000;
+      let formattedDate : Date = new Date(Date.parse(data.time) + offset);
+      let incidentString = "What's here?: " + data.title + "<br>" + "Date Added: " + formattedDate + "<br>" + "Interest Level: " + data.levelOfInterest + "<br>" + "Comments: " + data.comments + "<br>";
       let latLng = data.coords.split(',');
       let lat = latLng[0].substr(1);
       let long = latLng[1].substr(0, latLng[1].length - 1);
       this.addMarkerToMap(lat, long, incidentString);
+
+      let poiEntry = {
+        title: data.title,
+        time: formattedDate,
+        level: data.levelOfInterest,
+        comments: data.comments,
+        latitude: lat,
+        longitude: long
+      };
+
+      //TODO: Upload object to database
+
     });
 
     placeOfInterestModal.present();
@@ -100,7 +116,7 @@ export class HomePage {
       position: myLatLng,
       map: this.map,
       animation: google.maps.Animation.DROP,
-      icon: 'img/warning-icon-hi_small.png'
+      icon: '../../assets/icon/star.png'
     });
 
     //Gives each marker an Id for the on click
