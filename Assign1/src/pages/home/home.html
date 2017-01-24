@@ -1,0 +1,14 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Home</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div #map id="map" data-tap-disabled="true"></div>
+  <br>
+  <div class="item" style="text-align: center; vertical-align: middle">
+    <button ion-button color="secondary" round block (click)="reportEvent()">
+      <span><ion-icon name="add-circle"></ion-icon></span>&nbsp;Add a Place of Interest</button>
+  </div>
+</ion-content>
