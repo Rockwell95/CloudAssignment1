@@ -6,6 +6,7 @@ import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import {PlaceOfInterestPage} from "../pages/place-of-interest/place-of-interest";
+import {DataService} from "../providers/data-service";
 
 @NgModule({
   declarations: [
@@ -28,6 +29,9 @@ import {PlaceOfInterestPage} from "../pages/place-of-interest/place-of-interest"
     TabsPage,
     PlaceOfInterestPage
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
+  providers: [
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    DataService
+  ]
 })
 export class AppModule {}

@@ -1,11 +1,12 @@
 ///<reference path="../../../typings/globals/google.maps/index.d.ts"/>
 
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import {Component, ViewChild, ElementRef} from '@angular/core';
 
-import { NavController, ModalController} from 'ionic-angular';
+import {NavController, ModalController} from 'ionic-angular';
 
-import { Geolocation } from 'ionic-native';
+import {Geolocation} from 'ionic-native';
 import {PlaceOfInterestPage} from "../place-of-interest/place-of-interest";
+import {DataService} from "../../providers/data-service";
 
 @Component({
   selector: 'page-home',
@@ -16,17 +17,15 @@ export class HomePage {
   @ViewChild('map') mapElement: ElementRef;
 
   incidentArray: Array<any>;
+  arrayOfDBKeys: Array<string>;
   map: any;
   markerCount: number;
 
-  constructor(public navCtrl: NavController, private modalCtrl: ModalController) {
+  constructor(public navCtrl: NavController, private modalCtrl: ModalController, private _data: DataService) {
     // TODO: Retrieve objects from Database
-
     this.markerCount = 0;
 
     let options = {timeout: 10000, enableHighAccuracy: true};
-
-    this.incidentArray = [];
 
     Geolocation.getCurrentPosition(options).then((position) => {
 
@@ -45,6 +44,8 @@ export class HomePage {
 
       //Wait until the map is loaded
       google.maps.event.addListenerOnce(this.map, 'idle', () => {
+        this.loadPlaces();
+
         let marker = new google.maps.Marker({
           map: this.map,
           animation: google.maps.Animation.DROP,
@@ -68,7 +69,7 @@ export class HomePage {
           content: "Your location"
         });
 
-        google.maps.event.addListener(marker, 'click', function () {
+        google.maps.event.addListener(marker, 'click', () => {
           infoWindow.open(this.map, marker);
         });
       });
@@ -79,6 +80,23 @@ export class HomePage {
     });
   }
 
+  private loadPlaces() {
+    this._data.db.ref("places").on('value', (data) => {
+      this.incidentArray = data.val();
+      console.log(this.incidentArray);
+      this.arrayOfDBKeys = Object.keys(this.incidentArray);
+
+      for(let key of this.arrayOfDBKeys){
+        let offset: number = new Date().getTimezoneOffset() * 60000;
+        let formatDate: Date = new Date(Date.parse(this.incidentArray[key].time) + offset);
+        let markup = "<b>What's here?</b> " + this.incidentArray[key].title + "<br>" + "<b>Date Added:</b> " + formatDate + "<br>" + "<b>Interest Level:</b> " + this.incidentArray[key].level + "<br>" + "<b>Comments:</b> " + this.incidentArray[key].comments + "<br>";
+        this.addMarkerToMap(this.incidentArray[key].latitude, this.incidentArray[key].longitude, markup);
+      }
+
+      console.log(data.val());
+    });
+  }
+
   reportEvent(){
     let placeOfInterestModal = this.modalCtrl.create(PlaceOfInterestPage, {map: this.map});
 
@@ -86,30 +104,32 @@ export class HomePage {
       console.log(data);
 
       let offset: number = new Date().getTimezoneOffset() * 60000;
-      let formattedDate : Date = new Date(Date.parse(data.time) + offset);
-      let incidentString = "What's here?: " + data.title + "<br>" + "Date Added: " + formattedDate + "<br>" + "Interest Level: " + data.levelOfInterest + "<br>" + "Comments: " + data.comments + "<br>";
+      let formattedDate: Date = new Date(Date.parse(data.time) + offset);
+      let incidentString = "<b>What's here?</b> " + data.title + "<br>" + "<b>Date Added:</b> " + formattedDate + "<br>" + "<b>Interest Level:</b> " + data.levelOfInterest + "<br>" + "<b>Comments:</b> " + data.comments + "<br>";
       let latLng = data.coords.split(',');
       let lat = latLng[0].substr(1);
       let long = latLng[1].substr(0, latLng[1].length - 1);
       this.addMarkerToMap(lat, long, incidentString);
 
       let poiEntry = {
-        title: data.title,
-        time: formattedDate,
+        title: data.title ? data.title : "N/A",
+        time: data.time,
         level: data.levelOfInterest,
-        comments: data.comments,
+        comments: data.comments ? data.comments : "",
         latitude: lat,
-        longitude: long
+        longitude: long,
+        date: formattedDate
       };
 
-      //TODO: Upload object to database
+      // Saves places of interest to Database
+      this._data.db.ref('places').push(poiEntry);
 
     });
 
     placeOfInterestModal.present();
   }
 
-  addMarkerToMap(lat, long, htmlMarkupForInfoWindow){
+  addMarkerToMap(lat, long, htmlMarkupForInfoWindow) {
     let infowindow = new google.maps.InfoWindow();
     let myLatLng = new google.maps.LatLng(lat, long);
     let marker = new google.maps.Marker({
@@ -119,13 +139,13 @@ export class HomePage {
       icon: '../../assets/icon/star.png'
     });
 
-    //Gives each marker an Id for the on click
+    //Gives each marker an Id for the onClick
     this.markerCount++;
 
     //Creates the event listener for clicking the marker
     // and places the marker on the map
-    google.maps.event.addListener(marker, 'click', (function(marker, markerCount) {
-      return function() {
+    google.maps.event.addListener(marker, 'click', ((marker, markerCount) => {
+      return () => {
         infowindow.setContent(htmlMarkupForInfoWindow);
         infowindow.open(this.map, marker);
       }
