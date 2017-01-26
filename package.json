@@ -1,0 +1,20 @@
+{
+  "name": "cloudassign1",
+  "version": "1.0.0",
+  "description": "A Bookmark Utility for Google Maps",
+  "main": "server.js",
+  "scripts": {
+    "test": "node server.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rockwell95/CloudAssignment1.git"
+  },
+  "author": "Dominick Mancini",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rockwell95/CloudAssignment1/issues"
+  },
+  "homepage": "https://github.com/Rockwell95/CloudAssignment1#readme"
+}
