@@ -5,7 +5,7 @@
   "main": "server.js",
   "dependencies": {
     "express": "4.10.0"
-  }
+  },
   "scripts": {
     "test": "node server.js",
     "start": "node server.js"
