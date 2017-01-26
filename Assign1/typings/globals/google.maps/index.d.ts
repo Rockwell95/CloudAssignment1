@@ -367,7 +367,7 @@ declare namespace google.maps {
          */
         icon?: string|Icon|Symbol;
         /**
-         * Adds a label to the marker. The label can either be a string, or a MarkerLabel object. 
+         * Adds a label to the marker. The label can either be a string, or a MarkerLabel object.
          * Only the first character of the string will be displayed.
          * @type {(string|MarkerLabel)}
          */
@@ -393,7 +393,7 @@ declare namespace google.maps {
          * associated with this Marker. In this context, 'place' means a
          * business, point of interest or geographic location. To allow a user
          * to save this place, open an info window anchored on this marker.
-         * The info window will contain information about the place and an
+         * The info window will contain information poi the place and an
          * option for the user to save it. Only one of position or place can
          * be specified.
          */
@@ -462,7 +462,7 @@ declare namespace google.maps {
         /** The text to be displayed in the label. Only the first character of this string will be shown. */
         text?: string;
     }
-    
+
     export interface MarkerShape {
         coords?: number[];
         type?: string;
@@ -1774,7 +1774,7 @@ declare namespace google.maps {
         /** Returns a string of the form "lat,lng". We round the lat/lng values to 6 decimal places by default. */
         toUrlValue(precision?: number): string;
         /** Converts to JSON representation. This function is intended to be used via JSON.stringify. */
-        toJSON(): LatLngLiteral; 
+        toJSON(): LatLngLiteral;
     }
 
     export type LatLngLiteral = { lat: number; lng: number }

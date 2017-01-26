@@ -1,0 +1,48 @@
+<!--
+  Generated template for the PlaceInfo page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Places Info</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-item>
+    <ion-label stacked color="primary">Name</ion-label>
+    <ion-input id="title" type="text" [(ngModel)]="place.title" readonly></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label stacked color="primary">Coordinates</ion-label>
+    <ion-input id="coord" type="text" [(ngModel)]="coords" readonly></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label stacked color="primary">Approximate Location</ion-label>
+    <ion-input id="address" type="text" [(ngModel)]="address" readonly></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label stacked color="primary">Your Level of Interest</ion-label>
+    <ion-input id="level" type="text" [(ngModel)]="place.level" readonly></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label stacked color="primary">Date Added</ion-label>
+    <ion-input id="time" type="text" [(ngModel)]="parsedTime" readonly></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label stacked color="primary">Other Comments</ion-label>
+    <ion-input id="comment" type="text" [(ngModel)]="place.comments" readonly></ion-input>
+  </ion-item>
+  <ion-item>
+    <a ion-button outline color="primary" block [href]="mapsUrl" target="_blank"><span><ion-icon name="pin"></ion-icon></span>&nbsp;View on Google Maps</a>
+    <button ion-button outline color="secondary" block (click)="editDetails()"><span><ion-icon name="create"></ion-icon></span>&nbsp;Edit</button>
+    <button ion-button outline color="danger" block (click)="deletThis()"><span><ion-icon name="trash"></ion-icon></span>&nbsp;Delete</button>
+  </ion-item>
+
+
+</ion-content>

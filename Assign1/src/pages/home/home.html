@@ -1,14 +1,33 @@
-<ion-header>
+<ion-header id="header">
   <ion-navbar>
     <ion-title>Home</ion-title>
+    <ion-buttons end>
+      <button ion-button color="default" (click)="toggleSearch()">{{searchButtonString}}</button>
+    </ion-buttons>
   </ion-navbar>
+
+  <ion-toolbar [hidden]="hideSearch">
+    <ion-segment [(ngModel)]="searchType" padding>
+      <ion-segment-button value="">All</ion-segment-button>
+      <ion-segment-button value="address">Addresses</ion-segment-button>
+      <ion-segment-button value="establishment">Establishments</ion-segment-button>
+      <ion-segment-button value="geocode">Geocodes</ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
+  <ion-toolbar padding [hidden]="hideSearch">
+    <ion-item>
+      <ion-input id="input" [(ngModel)]="queryLocation" type="text" placeholder="Enter a location here..."></ion-input>
+      <ion-toggle title="Strict Bounds" [(ngModel)]="strictBounds" default="false" ></ion-toggle>
+    </ion-item>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
   <div #map id="map" data-tap-disabled="true"></div>
   <br>
   <div class="item" style="text-align: center; vertical-align: middle">
-    <button ion-button color="secondary" round block (click)="reportEvent()">
+    <button ion-button color="secondary" round block (click)="reportEvent()" [disabled]="!additionsEnabled">
       <span><ion-icon name="add-circle"></ion-icon></span>&nbsp;Add a Place of Interest</button>
   </div>
 </ion-content>

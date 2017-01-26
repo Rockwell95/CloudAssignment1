@@ -1,23 +1,23 @@
-import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
-import firebase from 'firebase';
+import {Injectable} from "@angular/core";
+import "rxjs/add/operator/map";
+import firebase from "firebase";
 
 /*
-  Generated class for the DataService provider.
+ Generated class for the DataService provider.
 
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular 2 DI.
-*/
+ See https://angular.io/docs/ts/latest/guide/dependency-injection.html
+ for more info on providers and Angular 2 DI.
+ */
 @Injectable()
 export class DataService {
 
   public db: any;
   public placesOfInterest: any;
 
-  constructor() {}
+  constructor() {
+  }
 
-  init(){
+  init() {
 
     const firebaseConfig = {
       apiKey: "AIzaSyDS2eZNqNvJPt5Apx1tg_MKg92UjAqrV6I",
@@ -38,9 +38,11 @@ export class DataService {
 
     this.db = firebase.database();
 
-    this.db.ref('test').on('value', (data) => {
+    this.db.ref('places').on('value', (data) => {
       console.log(data.val());
-    });
+    }, (error) => {
+      console.warn(error);
+    })
   }
 
 }
