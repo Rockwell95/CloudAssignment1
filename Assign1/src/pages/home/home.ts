@@ -169,7 +169,7 @@ export class HomePage implements DoCheck {
       position: myLatLng,
       map: this.map,
       animation: google.maps.Animation.DROP,
-      icon: '../../assets/icon/star.png'
+      icon: 'https://firebasestorage.googleapis.com/v0/b/sofe4870assign1.appspot.com/o/star.png?alt=media&token=34d17d9d-b7a9-4b2c-a634-c6aa03d6fe57'
     });
 
     //Gives each marker an Id for the onClick
