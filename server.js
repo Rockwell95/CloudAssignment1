@@ -10,10 +10,6 @@ app.all('*', function(req, res, next) {
     next();
 });
 
-app.get('/', function(req, res){
-  res.render('index');
-});
-
 // API Routes
 // app.get('/blah', routeHandler);
 
