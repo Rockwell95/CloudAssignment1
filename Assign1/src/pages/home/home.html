@@ -2,6 +2,8 @@
   <ion-navbar>
     <ion-title>Home</ion-title>
     <ion-buttons end>
+      <button ion-button color="secondary" (click)="saveMap()" [disabled]="!additionsEnabled">
+        <span><ion-icon name="camera"></ion-icon></span>&nbsp;Download</button>
       <button ion-button color="default" (click)="toggleSearch()">{{searchButtonString}}</button>
     </ion-buttons>
   </ion-navbar>
@@ -26,7 +28,7 @@
 <ion-content padding>
   <div #map id="map" data-tap-disabled="true"></div>
   <br>
-  <div class="item" style="text-align: center; vertical-align: middle">
+  <div id="buttons" class="item" style="text-align: center; vertical-align: middle">
     <button ion-button color="secondary" round block (click)="reportEvent()" [disabled]="!additionsEnabled">
       <span><ion-icon name="add-circle"></ion-icon></span>&nbsp;Add a Place of Interest</button>
   </div>

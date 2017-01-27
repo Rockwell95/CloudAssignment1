@@ -1,0 +1,6 @@
+{
+  "globalDependencies": {
+    "html2canvas": "registry:dt/html2canvas#0.5.0+20161229235626",
+    "jquery": "registry:dt/jquery#1.10.0+20170104155652"
+  }
+}

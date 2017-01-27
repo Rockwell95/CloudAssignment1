@@ -1,9 +1,13 @@
 ///<reference path="../../../typings/globals/google.maps/index.d.ts"/>
+///<reference path="../../../typings/globals/jquery/index.d.ts"/>
 import {Component, ViewChild, ElementRef, DoCheck} from "@angular/core";
 import {NavController, ModalController} from "ionic-angular";
 import {Geolocation} from "ionic-native";
 import {PlaceOfInterestPage} from "../place-of-interest/place-of-interest";
 import {DataService} from "../../providers/data-service";
+import * as $ from "jquery";
+import html2canvas from "html2canvas";
+import {map} from "rxjs/operator/map";
 
 @Component({
   selector: 'page-home',
@@ -297,5 +301,17 @@ export class HomePage implements DoCheck {
     this.markers = [];
   }
 
+  saveMap(){
+    let staticMap = document.createElement("img");
+    let staticMapUrl = "https://maps.googleapis.com/maps/api/staticmap?";
+    let staticUrlAppend = "center=" + this.map.getCenter().lat() + "," + this.map.getCenter().lng();
+    for(let marker of this.markers){
+      staticUrlAppend += "&markers=color:blue%7C" + marker.getPosition().lat() + "," + marker.getPosition().lng();
+    }
 
+    staticUrlAppend += "&zoom=" + (this.map.getZoom() - 1) + "&size=640x300&scale=2&key=AIzaSyBo4xOAhH65gf7eC1NPSB3E9XkobRUx7TQ";
+
+    let imageLink = staticMapUrl + staticUrlAppend;
+    window.open(imageLink, "_blank");
+  }
 }
