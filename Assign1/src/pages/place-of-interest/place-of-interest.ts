@@ -10,6 +10,7 @@ export class PlaceOfInterestPage {
   placeOfInterest: any;
   clock: number;
 
+  // Initialize this page.
   constructor(public navCtrl: NavController, public navParams: NavParams, private viewCtrl: ViewController) {
     this.map = navParams.get('map');
     this.placeOfInterest = {
@@ -28,14 +29,17 @@ export class PlaceOfInterestPage {
     }, 1000)
   }
 
+  // Closes create dialogue, and returns dialogue data to the call that initialized the dialogue
   dismiss(data) {
     this.viewCtrl.dismiss(data);
   }
 
+  // Stub to indicate successful load.
   ionViewDidLoad() {
     console.log('ionViewDidLoad PlaceOfInterestPage');
   }
 
+  // Increments time listed on "Create Place of Interest" window.
   tick(){
     let offset = new Date().getTimezoneOffset() * 60000;
     this.placeOfInterest.time = new Date(Date.now() - offset).toISOString();

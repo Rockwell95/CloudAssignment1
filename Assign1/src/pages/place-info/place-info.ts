@@ -19,6 +19,7 @@ export class PlaceInfoPage {
   mapsUrl: string;
   key: string;
 
+  // Initializes page.
   constructor(public navCtrl: NavController, public navParams: NavParams, private _data: DataService, private modalCtrl: ModalController, private alertCtrl: AlertController) {
     this.place = navParams.data.data;
     this.key = navParams.data.key;
@@ -33,6 +34,7 @@ export class PlaceInfoPage {
     this.reverseGeocode(this.place, geocoder);
   }
 
+  // Interpolates street address (or geographical area) from the x,y coordinates of a bookmark.
   private reverseGeocode(place: any, geocoder: google.maps.Geocoder) {
     let latLng = {lat: parseFloat(place.latitude), lng: parseFloat(place.longitude)};
 
@@ -49,6 +51,7 @@ export class PlaceInfoPage {
     });
   }
 
+  // Creates a window to edit the details of a selected bookmark. Page is similar to the "Create bookmark" page.
   private editDetails(){
     let ref = this._data.db.ref('places');
     ref.orderByKey().equalTo(this.key).on("child_added", (data) => {
@@ -93,6 +96,7 @@ export class PlaceInfoPage {
     })
   }
 
+  // Handles the deletion of a bookmark (both locally, and on firebase)
   private deletThis(){
     let confirm = this.alertCtrl.create({
       title: 'Confirm Delete',

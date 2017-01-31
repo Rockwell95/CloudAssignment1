@@ -24,6 +24,7 @@ export class POIPage {
     })
   }
 
+  // Opens page with more info on selected bookmark.
   private moreInfo(key: string){
     this.navCtrl.push(PlaceInfoPage, {key: key, data: this.pois[key]});
   }

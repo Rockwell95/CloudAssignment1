@@ -5,8 +5,6 @@ import {NavController, ModalController} from "ionic-angular";
 import {Geolocation} from "ionic-native";
 import {PlaceOfInterestPage} from "../place-of-interest/place-of-interest";
 import {DataService} from "../../providers/data-service";
-import * as $ from "jquery";
-import html2canvas from "html2canvas";
 import {map} from "rxjs/operator/map";
 
 @Component({
@@ -15,9 +13,8 @@ import {map} from "rxjs/operator/map";
 })
 export class HomePage implements DoCheck {
 
+  // Sets a watcher on a radio button to change the filter type on Places Autocomplete
   ngDoCheck(): void {
-    // Sets a listener on a radio button to change the filter type on Places
-    // Autocomplete.
     let searchParams = [];
     if (this.searchType !== "") {
       searchParams = [this.searchType];
@@ -45,6 +42,7 @@ export class HomePage implements DoCheck {
   searchButtonString: string;
   additionsEnabled: boolean;
 
+  // Initialize page.
   constructor(public navCtrl: NavController, private modalCtrl: ModalController, private _data: DataService) {
     this.markerCount = 0;
 
@@ -56,6 +54,7 @@ export class HomePage implements DoCheck {
 
     let options = {timeout: 10000, enableHighAccuracy: true};
 
+    // Initialize map
     Geolocation.getCurrentPosition(options).then((position) => {
 
       console.log("Got current position: ", position);
@@ -116,6 +115,7 @@ export class HomePage implements DoCheck {
     });
   }
 
+  // Retrieves already saved bookmarks from Firebase
   private loadPlaces() {
     this._data.db.ref("places").on('value', (data) => {
       this.placesArray = data.val();
@@ -132,7 +132,8 @@ export class HomePage implements DoCheck {
     });
   }
 
-  reportEvent() {
+  // Opens new bookmark window to add a marker, and when finished, saves it to Firebase.
+  createBookmark() {
     let placeOfInterestModal = this.modalCtrl.create(PlaceOfInterestPage, {map: this.map});
 
     placeOfInterestModal.onDidDismiss(data => {
@@ -166,6 +167,7 @@ export class HomePage implements DoCheck {
     placeOfInterestModal.present();
   }
 
+  // Creates and adds a new marker and info window to the map (when a bookmark is created)
   addMarkerToMap(lat, long, htmlMarkupForInfoWindow) {
     let infowindow = new google.maps.InfoWindow();
     let myLatLng = new google.maps.LatLng(lat, long);
@@ -188,20 +190,21 @@ export class HomePage implements DoCheck {
         infowindow.open(this.map, marker);
       }
     })(marker, this.markerCount));
-    //Pans map to the new location of the marker
-    //this.map.panTo(myLatLng); //- See more at: https://www.sundoginteractive.com/blog/working-with-dynamic-markers-in-google-maps-js-api#sthash.EhLN75wB.dpuf
   }
 
+  // Toggles the autocomplete search bar.
   toggleSearch() {
     this.hideSearch = !this.hideSearch;
   }
 
+  // Initialize the autocomplete search bar.
   autocompleteSetup() {
     let card = document.getElementById("header");
     let input = <HTMLInputElement>document.getElementById("input").children[0];
 
     // console.log(input);
 
+    //Prebuilt form for the autocomplete results info window.
     let infoWindowMarkup: string =
       ('<div id="infowindow-content">' +
       '<img src="" width="16" height="16" id="place-icon"> ' +
@@ -221,6 +224,7 @@ export class HomePage implements DoCheck {
     // bounds option in the request.
     autocomplete.bindTo('bounds', this.map);
 
+    // Constructs infoWindow at search result.
     let infowindow = new google.maps.InfoWindow();
     let infowindowContent: HTMLElement = markedup.getElementById('infowindow-content');
     infowindow.setContent(infowindowContent);
@@ -275,6 +279,7 @@ export class HomePage implements DoCheck {
     (<any>autocomplete).setOptions({strictBounds: this.strictBounds});
   }
 
+  // Executes immediately after this view is entered.
   ionViewDidEnter() {
     console.log('ionViewDidLoad HomePage');
     if(this.map){
@@ -284,6 +289,7 @@ export class HomePage implements DoCheck {
     }
   }
 
+  // Sets all markers on map
   setMapOnAll(map) {
     for (let i = 0; i < this.markers.length; i++) {
       this.markers[i].setMap(map);
@@ -301,6 +307,7 @@ export class HomePage implements DoCheck {
     this.markers = [];
   }
 
+  // opens link to Google Static Maps Image
   saveMap(){
     let staticMap = document.createElement("img");
     let staticMapUrl = "https://maps.googleapis.com/maps/api/staticmap?";
